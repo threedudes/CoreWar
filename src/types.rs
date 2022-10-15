@@ -44,18 +44,17 @@ pub enum Modifier {
 }
 
 impl Modifier {
-    pub fn from_str(data: &str) -> Option<Modifier> {
+    pub fn from_str(data: &str) -> Result<Modifier, Error> {
         match data{
-            "a" => Some(Modifier::A),
-            "b" => Some(Modifier::B),
-            "ab" => Some(Modifier::AB),
-            "ba" => Some(Modifier::BA),
-            "f" => Some(Modifier::F),
-            "x" => Some(Modifier::X),
-            "i" => Some(Modifier::I),
-            _ => None
+            "a" => Ok(Modifier::A),
+            "b" => Ok(Modifier::B),
+            "ab" => Ok(Modifier::AB),
+            "ba" => Ok(Modifier::BA),
+            "f" => Ok(Modifier::F),
+            "x" => Ok(Modifier::X),
+            "i" => Ok(Modifier::I),
+            _ => Err(Error::new(ErrorKind::InvalidData, format!("Modifier {} unknown", data)))
         }
-
     }
 }
 

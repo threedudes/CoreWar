@@ -34,9 +34,7 @@ pub fn parse(text: &str) -> Vec<types::Instruction> {
                 },
                 None => ()
             };
-            let modifier_string = t_match.name("modifier").map_or("", |m| m.as_str());
-            println!("{modifier_string}");
-            let modifier = types::Modifier::from_str(modifier_string);
+            let modifier = t_match.name("modifier").map_or(None, |m| Some(types::Modifier::from_str(m.as_str()).unwrap()));
             let params_string = t_match.name("params").map_or("", |m| m.as_str());
             let params_match = params_re.captures_iter(params_string);
             let blank = types::Param{mode: types::AddressingModes::Direct, value: types::Value::Integer(0)};
