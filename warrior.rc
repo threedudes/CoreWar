@@ -1,1 +1,4 @@
-mov 0,°1
+mov.I 0,1
+trap: mov 1,5
+jmp trap
+

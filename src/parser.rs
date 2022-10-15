@@ -4,7 +4,7 @@ use std::collections::HashMap;
 pub fn parse(text: &str) -> Vec<types::Instruction> {
     let lower = text.to_lowercase();
     let lines = lower.split("\n");
-    let re = Regex::new(r"[ \t]*((?P<label>[a-z]*):?[ \t]+)?(?P<opstring>[a-z]+(?P<modifier>.[a-z]+)?)[ \t]+(?P<params>[^;]*)[ \t]*(;.*)?").unwrap();
+    let re = Regex::new(r"[ \t]*((?P<label>[a-z]*):?[ \t]+)?((?P<opstring>[a-z]+)(.(?P<modifier>[a-z]+))?)[ \t]+(?P<params>[^;]*)[ \t]*(;.*)?").unwrap();
     /*
     This regex match this pattern:
     label: instruction.modifier params
@@ -35,6 +35,7 @@ pub fn parse(text: &str) -> Vec<types::Instruction> {
                 None => ()
             };
             let modifier_string = t_match.name("modifier").map_or("", |m| m.as_str());
+            println!("{modifier_string}");
             let modifier = types::Modifier::from_str(modifier_string);
             let params_string = t_match.name("params").map_or("", |m| m.as_str());
             let params_match = params_re.captures_iter(params_string);
