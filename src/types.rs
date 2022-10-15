@@ -81,7 +81,8 @@ impl AddressingModes {
             "<" => AddressingModes::BIndirectPredecrement,
             "}" => AddressingModes::AIndirectPostincrement,
             ">" => AddressingModes::BIndirectPostincrement,
-            _ => AddressingModes::Direct
+            "$" => AddressingModes::Direct,
+            _ => AddressingModes::Direct,
         }
     }
 }

@@ -11,7 +11,7 @@ pub fn parse(text: &str) -> Vec<types::Instruction> {
 
     Everything have to be in lowercase.
     */
-    let params_re = Regex::new(r"([, \t]*(?P<addressmode>[#@*<>{}])?(?P<value>[a-z0-9-]+))").unwrap();
+    let params_re = Regex::new(r"(?P<addressmode>[#@*<>{}])?(?P<value>[a-z0-9-]+)").unwrap();
     /*
     This regex match parameters like:
     #3, 1
