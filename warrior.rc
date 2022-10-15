@@ -1,3 +1,1 @@
-mov.ab 0,1
-trap: mov 1,5
-jmp.i trap
+mov 0,1
