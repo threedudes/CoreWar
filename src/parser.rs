@@ -4,6 +4,8 @@ use std::collections::HashMap;
 pub fn parse(text: &str) -> types::Warrior {
     let lower = text.to_lowercase();
     let lines = lower.split("\n");
+    //TODO: Replace this parser with a beautiful one using pest crate.
+    
     let re = Regex::new(r"[ \t]*((?P<label>[a-z]*):?[ \t]+)?((?P<opstring>[a-z]+)(.(?P<modifier>[a-z]+))?)[ \t]+(?P<params>[^;]*)[ \t]*(;.*)?").unwrap();
     /*
     This regex match this pattern:
