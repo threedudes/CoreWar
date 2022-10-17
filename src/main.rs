@@ -1,5 +1,6 @@
 mod types;
 mod parser;
+mod macros;
 use std::fs;
 
 fn main() {

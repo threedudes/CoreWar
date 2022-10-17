@@ -28,7 +28,8 @@ pub fn parse(text: &str) -> Vec<types::Instruction> {
                 Some(opstring) => opstring.as_str(),
                 None => continue
             };
-            match t_match.name("label") {
+            let label = t_match.name("label");
+            match label {
                 Some(label) => {
                     labels.insert(label.as_str(), counter);
                 },
@@ -37,7 +38,7 @@ pub fn parse(text: &str) -> Vec<types::Instruction> {
             let modifier = t_match.name("modifier").map_or(None, |m| Some(types::Modifier::from_str(m.as_str()).unwrap()));
             let params_string = t_match.name("params").map_or("", |m| m.as_str());
             let params_match = params_re.captures_iter(params_string);
-            let blank = types::Param{mode: types::AddressingModes::Direct, value: types::Value::Integer(0)};
+            let blank = types::Param{mode: types::AddressingMode::Direct, value: types::Value::Integer(0)};
             let mut params = vec![blank.clone(), blank];
             for (index,param) in params_match.enumerate(){
                 let value_string = param.name("value").unwrap().as_str();
@@ -46,15 +47,16 @@ pub fn parse(text: &str) -> Vec<types::Instruction> {
                     Ok(num) => types::Value::Integer(num),
                     Err(_) => types::Value::Label(value_string.to_string())
                 };
-                let mode = types::AddressingModes::from_str(param.name("addressmode").map_or("$", |m| m.as_str()));
+                let mode = types::AddressingMode::from_str(param.name("addressmode").map_or("$", |m| m.as_str())).unwrap();
                 let param = types::Param{mode,value};
                 params[index] = param
             }
-            let opcode = types::OpCode::from_opstring(opstring).unwrap();
+            let opcode = types::OpCode::from_str(opstring).unwrap();
             let instruction = types::Instruction {
-                opcode: opcode,
-                modifier: modifier,
-                params: (params[0].clone(), params[1].clone())
+                opcode,
+                modifier,
+                params: (params[0].clone(), params[1].clone()),
+                label: label.map_or(String::from(""), |l| l.as_str().to_string())
             };
             instructions.push(instruction);
             counter += 1
