@@ -1,2 +1,3 @@
-start mov 0,1
-trap jm start
+start: mov start, trap
+dat 0, 5
+trap: jmp start

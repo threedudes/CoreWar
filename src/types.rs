@@ -1,9 +1,12 @@
 use crate::macros;
+use std::collections::HashMap;
+
 
 macros::matcher_gen!{
     enum OpCode {
         "mov" => Mov,
-        "jmp" => Jump
+        "jmp" => Jump,
+        "dat" => Dat
     }
 }
 
@@ -49,6 +52,27 @@ pub enum Value {
 pub struct Instruction {
     pub modifier: Option<Modifier>,
     pub opcode: OpCode,
-    pub params: (Param, Param), // A and B,
-    pub label: String
+    pub params: (Param, Param), // A and B
+}
+
+#[derive(Debug)]
+pub struct Warrior {
+    pub instructions: Vec<Instruction>,
+}
+
+impl Warrior {
+    pub fn process_labels(&mut self, labels: HashMap<String, i16>) {
+        //TODO: Handle label not found error
+        for (index, instruction) in self.instructions.iter_mut().enumerate() {
+            let (a,b) = &mut instruction.params;
+            a.value = match &a.value {
+                Value::Integer(i) => Value::Integer(*i),
+                Value::Label(lab) => Value::Integer(labels[lab] - index as i16)
+            };
+            b.value = match &b.value {
+                Value::Integer(i) => Value::Integer(*i),
+                Value::Label(lab) => Value::Integer(labels[lab] - index as i16)
+            }
+        }
+    }
 }

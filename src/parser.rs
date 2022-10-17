@@ -1,7 +1,7 @@
 use crate::types;
 use regex::Regex;
 use std::collections::HashMap;
-pub fn parse(text: &str) -> Vec<types::Instruction> {
+pub fn parse(text: &str) -> types::Warrior {
     let lower = text.to_lowercase();
     let lines = lower.split("\n");
     let re = Regex::new(r"[ \t]*((?P<label>[a-z]*):?[ \t]+)?((?P<opstring>[a-z]+)(.(?P<modifier>[a-z]+))?)[ \t]+(?P<params>[^;]*)[ \t]*(;.*)?").unwrap();
@@ -18,7 +18,7 @@ pub fn parse(text: &str) -> Vec<types::Instruction> {
     @2, {-1
     modifier+value, modifier+value,..
     */
-    let mut labels: HashMap<&str, i16> = HashMap::new();
+    let mut labels: HashMap<String, i16> = HashMap::new();
     let mut counter = 0;
     let mut instructions = vec![];
     for line in lines {
@@ -31,7 +31,7 @@ pub fn parse(text: &str) -> Vec<types::Instruction> {
             let label = t_match.name("label");
             match label {
                 Some(label) => {
-                    labels.insert(label.as_str(), counter);
+                    labels.insert(label.as_str().to_string(), counter);
                 },
                 None => ()
             };
@@ -55,13 +55,15 @@ pub fn parse(text: &str) -> Vec<types::Instruction> {
             let instruction = types::Instruction {
                 opcode,
                 modifier,
+                //TODO:  .clone should not be used !
                 params: (params[0].clone(), params[1].clone()),
-                label: label.map_or(String::from(""), |l| l.as_str().to_string())
             };
             instructions.push(instruction);
             counter += 1
         }
     }
 
-    return instructions
+    let mut warrior = types::Warrior{instructions};
+    warrior.process_labels(labels);
+    return warrior
 }
