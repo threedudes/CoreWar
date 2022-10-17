@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use rand::prelude::*;
 pub struct Core {
     size: u16,
-    data: HashMap<u16, Instruction> // Using a HashMap instead of a vector to avoid storing 8000 values. 
+    pub data: HashMap<u16, Instruction> // Using a HashMap instead of a vector to avoid storing 8000 values. 
 }
 
 impl Core {

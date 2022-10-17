@@ -2,6 +2,7 @@ use crate::macros;
 use std::collections::HashMap;
 
 
+
 macros::matcher_gen!{
     enum OpCode {
         "mov" => Mov,
