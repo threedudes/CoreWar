@@ -1,6 +1,8 @@
 use crate::types;
 use regex::Regex;
 use std::collections::HashMap;
+use rand::{Rng, thread_rng};
+
 pub fn parse(text: &str) -> types::Warrior {
     let lower = text.to_lowercase();
     let lines = lower.split("\n");
@@ -13,7 +15,7 @@ pub fn parse(text: &str) -> types::Warrior {
 
     Everything have to be in lowercase.
     */
-    let params_re = Regex::new(r"(?P<addressmode>[#@*<>{}])?(?P<value>[a-z0-9-]+)").unwrap();
+    let params_re = Regex::new(r"(?P<addressmode>[#@*<>{}])?(?P<value>[a-z0-9-+]+)").unwrap();
     /*
     This regex match parameters like:
     #3, 1
@@ -65,7 +67,8 @@ pub fn parse(text: &str) -> types::Warrior {
         }
     }
 
-    let mut warrior = types::Warrior{instructions};
+    let mut rng = thread_rng();
+    let mut warrior = types::Warrior{instructions, identifier:rng.gen()};
     warrior.process_labels(labels);
     return warrior
 }

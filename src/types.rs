@@ -7,7 +7,17 @@ macros::matcher_gen!{
     enum OpCode {
         "mov" => Mov,
         "jmp" => Jump,
-        "dat" => Dat
+        "dat" => Dat,
+        "equ" => Equ,
+        "add" => Add,
+        "jmz" => Jmz,
+        "for" => For, //not a valid instruction
+        "rof" => Rof, // same
+        "gate" => Gate,
+        "dec" => Dec,
+        "spl" => Spit,
+        "djn" => Djn,
+        "jmn" => Jmn
     }
 }
 
@@ -59,6 +69,7 @@ pub struct Instruction {
 #[derive(Debug)]
 pub struct Warrior {
     pub instructions: Vec<Instruction>,
+    pub identifier: u8
 }
 
 impl Warrior {
